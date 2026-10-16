@@ -68,5 +68,53 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // iniciar os slides de forma automática
     startSlide();
+
+    //validação campos formulário
+    const contatoForm = document.getElementById("contatoForm");
+    const name = document.getElementById("name");
+    const email = document.getElementById("email");
+    const mensagem = document.getElementById("mensagem");
+
+    contatoForm.addEventListener("submit", (event) =>{
+        event.preventDefault();
+        let isValid = true;
+        // Validação do campo nome (mínimo 3 caracteres)
+        if(name.value.trim().length < 3){
+            showErro(name, "o nome deve ter no mínimo 3 caracteres");
+            isValid = false;
+        }
+        // Verificação do campo email
+        if(!isEmailValid(email.value.trim())){
+            showErro(email,"insira um email válido")
+            isValid = false
+        }
+        // validação mensagem (mínimo 10 caracteres)
+        if(mansagem.value.trim().length < 10){
+            showErro(mensagem, "a mensagem deve ter no mínimo 10 caracteres");
+            isValid = false;
+        }
+        // verificar se deu tudo certo
+        if (isValid){
+            clearError();
+            alert("Mensagem enviado com suscesso");
+            contatoForm.reset();
+        }
+    }); 
+
+    function isEmailValid (email){
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*$/;
+        return emailRegex.test(email);
+    }
+
+    function showErro(inputElement, mensagem){
+        const formGroup = inputElement.parentElement;
+        clearFieldError(inputElement);
+        const erroMensagem = document.createElement("small");
+        erroMensagem.className = "error-text";
+        erroMensagem.innerText = mensagem;
+        formGroup.appensChild(erroMensagem);
+    }
+
 }); //fechamento do evento carregar página do html
